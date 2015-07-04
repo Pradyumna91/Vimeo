@@ -1,7 +1,11 @@
-#include "utility.h"
+#include "productkeyhandler.h"
 
-Utility::Utility(QObject *parent) : QObject(parent)
+bool ProductKeyHandler::isLincensedProduct()
 {
-
+    return true;
 }
 
+bool ProductKeyHandler::isValidProductKey(QString productKey)
+{
+    return true;
+}
