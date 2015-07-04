@@ -13,8 +13,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    productkeyform.cpp \
+    productkeyhandler.cpp \
+    uploadedvideosstoragehandler.cpp \
+    newvideowizard.cpp
 
-HEADERS  += mainwindow.h
+INCLUDEPATH +=  /usr/local/include/libopenshot/ \
+                /usr/local/include/libopenshot-audio/
 
-FORMS    += mainwindow.ui
+HEADERS  += mainwindow.h \
+    productkeyform.h \
+    productkeyhandler.h \
+    uploadedvideosstoragehandler.h \
+    newvideowizard.h
+
+FORMS    += mainwindow.ui \
+    productkeyform.ui \
+    newvideowizard.ui
+
+RESOURCES +=

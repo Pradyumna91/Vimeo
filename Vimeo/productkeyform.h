@@ -15,6 +15,9 @@ public:
     explicit ProductKeyForm(QWidget *parent = 0);
     ~ProductKeyForm();
 
+public slots:
+    void acceptProductKey();
+
 private:
     Ui::ProductKeyForm *ui;
 };

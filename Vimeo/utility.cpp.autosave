@@ -1,0 +1,7 @@
+#include "utility.h"
+
+bool ProductKeyHandler::isLincensedProduct()
+{
+    return false;
+}
+

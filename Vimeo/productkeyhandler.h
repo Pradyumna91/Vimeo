@@ -3,15 +3,12 @@
 
 #include <QObject>
 
-class Utility : public QObject
+class ProductKeyHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit Utility(QObject *parent = 0);
-
-signals:
-
-public slots:
+    static bool isLincensedProduct();
+    static bool isValidProductKey(QString productKey);
 };
 
 #endif // UTILITY_H

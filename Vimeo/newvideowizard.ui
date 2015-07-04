@@ -1,18 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>NewVideoWizard</class>
- <widget name="NewVideoWizard" class="QWizard">
+ <widget class="QWizard" name="NewVideoWizard">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>638</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Wizard</string>
   </property>
-  <widget name="wizardPage1" class="QWizardPage"/>
-  <widget name="wizardPage2" class="QWizardPage"/>
+  <widget class="QWizardPage" name="addAnnotationsPage"/>
+  <widget class="QWizardPage" name="addKeywordsPage"/>
+  <widget class="QWizardPage" name="uploadPage"/>
  </widget>
+ <resources/>
+ <connections/>
 </ui>
