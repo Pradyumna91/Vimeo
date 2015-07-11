@@ -12,3 +12,8 @@ WebViewDialog::~WebViewDialog()
 {
     delete ui;
 }
+
+QWebView *WebViewDialog::getWebView()
+{
+    return ui->webView;
+}

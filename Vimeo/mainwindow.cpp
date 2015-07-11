@@ -21,8 +21,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::openNewUploadWizard()
 {
-    NewVideoWizard wizrd;
-    wizrd.exec();
+    wizrd = new NewVideoWizard();
+    connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(uploadVideo()));
+    wizrd->show();
 }
 
 void MainWindow::populateUploadedVideosTable()

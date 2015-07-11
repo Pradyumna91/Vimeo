@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_WEBKITWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_WEBKIT_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../Vimeo -I. -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I../../../Qt/5.4/gcc_64/include -I../../../Qt/5.4/gcc_64/include/QtWidgets -I../../../Qt/5.4/gcc_64/include/QtGui -I../../../Qt/5.4/gcc_64/include/QtCore -I. -I. -I../../../Qt/5.4/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../Vimeo -I. -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I../../../Qt/5.4/gcc_64/include -I../../../Qt/5.4/gcc_64/include/QtWebKitWidgets -I../../../Qt/5.4/gcc_64/include/QtWidgets -I../../../Qt/5.4/gcc_64/include/QtWebKit -I../../../Qt/5.4/gcc_64/include/QtGui -I../../../Qt/5.4/gcc_64/include/QtNetwork -I../../../Qt/5.4/gcc_64/include/QtCore -I. -I. -I../../../Qt/5.4/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/pradyumna/Qt/5.4/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,8 +35,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = Vimeo1.0.0
 DISTDIR = /home/pradyumna/Source/Vimeo/Vimeo/.tmp/Vimeo1.0.0
 LINK          = g++
-LFLAGS        = -Wl,-rpath,/home/pradyumna/Qt/5.4/gcc_64 -Wl,-rpath,/home/pradyumna/Qt/5.4/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/pradyumna/Qt/5.4/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LFLAGS        = -Wl,-rpath,/home/pradyumna/Qt/5.4/gcc_64 -Wl,-rpath,/home/pradyumna/Qt/5.4/gcc_64/lib -Wl,-rpath-link,/home/pradyumna/Qt/5.4/gcc_64/lib
+LIBS          = $(SUBLIBS) -L/home/pradyumna/Qt/5.4/gcc_64/lib -lQt5WebKitWidgets -lQt5Widgets -lQt5WebKit -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -53,20 +53,34 @@ SOURCES       = ../Vimeo/main.cpp \
 		../Vimeo/productkeyform.cpp \
 		../Vimeo/productkeyhandler.cpp \
 		../Vimeo/uploadedvideosstoragehandler.cpp \
-		../Vimeo/newvideowizard.cpp moc_mainwindow.cpp \
+		../Vimeo/newvideowizard.cpp \
+		../Vimeo/youtubeuploader.cpp \
+		../Vimeo/webviewdialog.cpp \
+		../Vimeo/uploadmanager.cpp \
+		../Vimeo/video.cpp \
+		../Vimeo/videouploader.cpp moc_mainwindow.cpp \
 		moc_productkeyform.cpp \
 		moc_productkeyhandler.cpp \
-		moc_newvideowizard.cpp
+		moc_newvideowizard.cpp \
+		moc_youtubeuploader.cpp \
+		moc_webviewdialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		productkeyform.o \
 		productkeyhandler.o \
 		uploadedvideosstoragehandler.o \
 		newvideowizard.o \
+		youtubeuploader.o \
+		webviewdialog.o \
+		uploadmanager.o \
+		video.o \
+		videouploader.o \
 		moc_mainwindow.o \
 		moc_productkeyform.o \
 		moc_productkeyhandler.o \
-		moc_newvideowizard.o
+		moc_newvideowizard.o \
+		moc_youtubeuploader.o \
+		moc_webviewdialog.o
 DIST          = ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf \
 		../../../Qt/5.4/gcc_64/mkspecs/common/unix.conf \
@@ -190,12 +204,22 @@ DIST          = ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
 		../Vimeo/productkeyform.h \
 		../Vimeo/productkeyhandler.h \
 		../Vimeo/uploadedvideosstoragehandler.h \
-		../Vimeo/newvideowizard.h ../Vimeo/main.cpp \
+		../Vimeo/newvideowizard.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/webviewdialog.h \
+		../Vimeo/uploadmanager.h \
+		../Vimeo/video.h \
+		../Vimeo/videouploader.h ../Vimeo/main.cpp \
 		../Vimeo/mainwindow.cpp \
 		../Vimeo/productkeyform.cpp \
 		../Vimeo/productkeyhandler.cpp \
 		../Vimeo/uploadedvideosstoragehandler.cpp \
-		../Vimeo/newvideowizard.cpp
+		../Vimeo/newvideowizard.cpp \
+		../Vimeo/youtubeuploader.cpp \
+		../Vimeo/webviewdialog.cpp \
+		../Vimeo/uploadmanager.cpp \
+		../Vimeo/video.cpp \
+		../Vimeo/videouploader.cpp
 QMAKE_TARGET  = Vimeo
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Vimeo
@@ -223,7 +247,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h ui_webviewdialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Vimeo/Vimeo.pro ../../../Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf \
@@ -346,9 +370,12 @@ Makefile: ../Vimeo/Vimeo.pro ../../../Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf
 		../../../Qt/5.4/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/5.4/gcc_64/mkspecs/features/lex.prf \
 		../Vimeo/Vimeo.pro \
+		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5WebKitWidgets.prl \
 		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Widgets.prl \
 		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Gui.prl \
-		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Core.prl
+		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Core.prl \
+		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5WebKit.prl \
+		/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Network.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../Vimeo/Vimeo.pro
 ../../../Qt/5.4/gcc_64/mkspecs/features/spec_pre.prf:
 ../../../Qt/5.4/gcc_64/mkspecs/common/shell-unix.conf:
@@ -470,9 +497,12 @@ Makefile: ../Vimeo/Vimeo.pro ../../../Qt/5.4/gcc_64/mkspecs/linux-g++/qmake.conf
 ../../../Qt/5.4/gcc_64/mkspecs/features/yacc.prf:
 ../../../Qt/5.4/gcc_64/mkspecs/features/lex.prf:
 ../Vimeo/Vimeo.pro:
+/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5WebKitWidgets.prl:
 /home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Widgets.prl:
 /home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Gui.prl:
 /home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Core.prl:
+/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5WebKit.prl:
+/home/pradyumna/Qt/5.4/gcc_64/lib/libQt5Network.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../Vimeo/Vimeo.pro
 
@@ -487,9 +517,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../Vimeo/mainwindow.h ../Vimeo/productkeyform.h ../Vimeo/productkeyhandler.h ../Vimeo/uploadedvideosstoragehandler.h ../Vimeo/newvideowizard.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Vimeo/main.cpp ../Vimeo/mainwindow.cpp ../Vimeo/productkeyform.cpp ../Vimeo/productkeyhandler.cpp ../Vimeo/uploadedvideosstoragehandler.cpp ../Vimeo/newvideowizard.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Vimeo/mainwindow.ui ../Vimeo/productkeyform.ui ../Vimeo/newvideowizard.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Vimeo/mainwindow.h ../Vimeo/productkeyform.h ../Vimeo/productkeyhandler.h ../Vimeo/uploadedvideosstoragehandler.h ../Vimeo/newvideowizard.h ../Vimeo/youtubeuploader.h ../Vimeo/webviewdialog.h ../Vimeo/uploadmanager.h ../Vimeo/video.h ../Vimeo/videouploader.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Vimeo/main.cpp ../Vimeo/mainwindow.cpp ../Vimeo/productkeyform.cpp ../Vimeo/productkeyhandler.cpp ../Vimeo/uploadedvideosstoragehandler.cpp ../Vimeo/newvideowizard.cpp ../Vimeo/youtubeuploader.cpp ../Vimeo/webviewdialog.cpp ../Vimeo/uploadmanager.cpp ../Vimeo/video.cpp ../Vimeo/videouploader.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Vimeo/mainwindow.ui ../Vimeo/productkeyform.ui ../Vimeo/newvideowizard.ui ../Vimeo/webviewdialog.ui $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -512,9 +542,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_productkeyform.cpp moc_productkeyhandler.cpp moc_newvideowizard.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_productkeyform.cpp moc_productkeyhandler.cpp moc_newvideowizard.cpp moc_youtubeuploader.cpp moc_webviewdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_productkeyform.cpp moc_productkeyhandler.cpp moc_newvideowizard.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_productkeyform.cpp moc_productkeyhandler.cpp moc_newvideowizard.cpp moc_youtubeuploader.cpp moc_webviewdialog.cpp
 moc_mainwindow.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
@@ -620,8 +650,54 @@ moc_mainwindow.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../Vimeo/newvideowizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
 		../Vimeo/mainwindow.h
-	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/mainwindow.h -o moc_mainwindow.cpp
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/mainwindow.h -o moc_mainwindow.cpp
 
 moc_productkeyform.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QWidget \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
@@ -726,7 +802,7 @@ moc_productkeyform.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QWidget \
 		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
 		../Vimeo/productkeyform.h
-	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/productkeyform.h -o moc_productkeyform.cpp
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/productkeyform.h -o moc_productkeyform.cpp
 
 moc_productkeyhandler.cpp: ../../../Qt/5.4/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
@@ -779,7 +855,7 @@ moc_productkeyhandler.cpp: ../../../Qt/5.4/gcc_64/include/QtCore/QObject \
 		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
 		../Vimeo/productkeyhandler.h
-	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/productkeyhandler.h -o moc_productkeyhandler.cpp
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/productkeyhandler.h -o moc_productkeyhandler.cpp
 
 moc_newvideowizard.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qwizard.h \
@@ -885,14 +961,332 @@ moc_newvideowizard.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
 		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
 		../Vimeo/newvideowizard.h
-	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/newvideowizard.h -o moc_newvideowizard.cpp
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/newvideowizard.h -o moc_newvideowizard.cpp
+
+moc_youtubeuploader.cpp: ../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
+		../Vimeo/youtubeuploader.h
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/youtubeuploader.h -o moc_youtubeuploader.cpp
+
+moc_webviewdialog.cpp: ../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h
+	/home/pradyumna/Qt/5.4/gcc_64/bin/moc $(DEFINES) -I/home/pradyumna/Qt/5.4/gcc_64/mkspecs/linux-g++ -I/home/pradyumna/Source/Vimeo/Vimeo -I/usr/local/include/libopenshot -I/usr/local/include/libopenshot-audio -I/home/pradyumna/Qt/5.4/gcc_64/include -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKitWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWidgets -I/home/pradyumna/Qt/5.4/gcc_64/include/QtWebKit -I/home/pradyumna/Qt/5.4/gcc_64/include/QtGui -I/home/pradyumna/Qt/5.4/gcc_64/include/QtNetwork -I/home/pradyumna/Qt/5.4/gcc_64/include/QtCore -I. ../Vimeo/webviewdialog.h -o moc_webviewdialog.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h
+compiler_uic_make_all: ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h ui_webviewdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h
+	-$(DEL_FILE) ui_mainwindow.h ui_productkeyform.h ui_newvideowizard.h ui_webviewdialog.h
 ui_mainwindow.h: ../Vimeo/mainwindow.ui
 	/home/pradyumna/Qt/5.4/gcc_64/bin/uic ../Vimeo/mainwindow.ui -o ui_mainwindow.h
 
@@ -901,6 +1295,10 @@ ui_productkeyform.h: ../Vimeo/productkeyform.ui
 
 ui_newvideowizard.h: ../Vimeo/newvideowizard.ui
 	/home/pradyumna/Qt/5.4/gcc_64/bin/uic ../Vimeo/newvideowizard.ui -o ui_newvideowizard.h
+
+ui_webviewdialog.h: ../Vimeo/webviewdialog.ui \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView
+	/home/pradyumna/Qt/5.4/gcc_64/bin/uic ../Vimeo/webviewdialog.ui -o ui_webviewdialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -1018,8 +1416,53 @@ main.o: ../Vimeo/main.cpp ../Vimeo/mainwindow.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
-		../Vimeo/productkeyhandler.h \
+		../Vimeo/newvideowizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
+		../Vimeo/productkeyhandler.h \
 		../Vimeo/productkeyform.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QWidget \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QApplication \
@@ -1137,63 +1580,59 @@ mainwindow.o: ../Vimeo/mainwindow.cpp ../Vimeo/mainwindow.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
-		ui_mainwindow.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QAction \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qaction.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qactiongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QButtonGroup \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHeaderView \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qframe.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyleoption.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qvalidator.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qregularexpression.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyle.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabbar.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QMenuBar \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qmenubar.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qmenu.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QPushButton \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qpushbutton.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractbutton.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QTableView \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtableview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QToolBar \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtoolbar.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qboxlayout.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayout.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayoutitem.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qgridlayout.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QWidget \
 		../Vimeo/newvideowizard.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qwizard.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
-		../Vimeo/uploadedvideosstoragehandler.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/QString \
 		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
+		ui_mainwindow.h \
+		../Vimeo/uploadedvideosstoragehandler.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/QList \
+		../../../Qt/5.4/gcc_64/include/QtCore/QDate \
 		../../../Qt/5.4/gcc_64/include/QtGui/QStandardItemModel \
-		../../../Qt/5.4/gcc_64/include/QtGui/qstandarditemmodel.h
+		../../../Qt/5.4/gcc_64/include/QtGui/qstandarditemmodel.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Vimeo/mainwindow.cpp
 
 productkeyform.o: ../Vimeo/productkeyform.cpp ../Vimeo/productkeyform.h \
@@ -1300,53 +1739,58 @@ productkeyform.o: ../Vimeo/productkeyform.cpp ../Vimeo/productkeyform.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
 		ui_productkeyform.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QAction \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qaction.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qactiongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QButtonGroup \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialogButtonBox \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHeaderView \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qframe.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyleoption.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qvalidator.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qregularexpression.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyle.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabbar.h \
+		../Vimeo/productkeyhandler.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../Vimeo/mainwindow.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QMainWindow \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QLabel \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlabel.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QLineEdit \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlineedit.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qtextcursor.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qtextformat.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../Vimeo/newvideowizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QWizard \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwizard.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QVBoxLayout \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qboxlayout.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayout.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qlayoutitem.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qgridlayout.h
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o productkeyform.o ../Vimeo/productkeyform.cpp
 
 productkeyhandler.o: ../Vimeo/productkeyhandler.cpp ../Vimeo/productkeyhandler.h \
@@ -1465,6 +1909,8 @@ uploadedvideosstoragehandler.o: ../Vimeo/uploadedvideosstoragehandler.cpp ../Vim
 		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/QList \
+		../../../Qt/5.4/gcc_64/include/QtCore/QDate \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
 		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
@@ -1585,41 +2031,541 @@ newvideowizard.o: ../Vimeo/newvideowizard.cpp ../Vimeo/newvideowizard.h \
 		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
-		ui_newvideowizard.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QAction \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qaction.h \
+		../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
 		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qactiongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QApplication \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qcoreapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qeventloop.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qdesktopwidget.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qguiapplication.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qinputmethod.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QButtonGroup \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qbuttongroup.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QHeaderView \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qheaderview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemview.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qframe.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qitemselectionmodel.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyleoption.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractspinbox.h \
-		../../../Qt/5.4/gcc_64/include/QtGui/qvalidator.h \
-		../../../Qt/5.4/gcc_64/include/QtCore/qregularexpression.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qabstractslider.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qstyle.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabbar.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qtabwidget.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/qrubberband.h \
-		../../../Qt/5.4/gcc_64/include/QtWidgets/QWizardPage
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
+		ui_newvideowizard.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newvideowizard.o ../Vimeo/newvideowizard.cpp
+
+youtubeuploader.o: ../Vimeo/youtubeuploader.cpp ../Vimeo/youtubeuploader.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrl \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkReply \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkreply.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QIODevice \
+		../../../Qt/5.4/gcc_64/include/QtCore/QVariant \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkRequest \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkrequest.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QSharedDataPointer \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonDocument \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsondocument.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonvalue.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFile \
+		../../../Qt/5.4/gcc_64/include/QtCore/QUrlQuery \
+		../../../Qt/5.4/gcc_64/include/QtCore/QJsonArray \
+		../../../Qt/5.4/gcc_64/include/QtCore/qjsonarray.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o youtubeuploader.o ../Vimeo/youtubeuploader.cpp
+
+webviewdialog.o: ../Vimeo/webviewdialog.cpp ../Vimeo/webviewdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/QDialog \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qdialog.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qwidget.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmargins.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpaintdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrect.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsize.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpalette.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcolor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qrgb.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qbrush.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qmatrix.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpolygon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qregion.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qline.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtransform.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainterpath.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qimage.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixelformat.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpixmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfont.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontmetrics.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qfontinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qcursor.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qkeysequence.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qurlquery.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfile.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfiledevice.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qvector2d.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtouchdevice.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/QWebView \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebview.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebkitglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKitWidgets/qwebpage.h \
+		../../../Qt/5.4/gcc_64/include/QtWebKit/qwebsettings.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qicon.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpainter.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qtextoption.h \
+		../../../Qt/5.4/gcc_64/include/QtGui/qpen.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		ui_webviewdialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o webviewdialog.o ../Vimeo/webviewdialog.cpp
+
+uploadmanager.o: ../Vimeo/uploadmanager.cpp ../Vimeo/uploadmanager.h \
+		../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags \
+		../../../Qt/5.4/gcc_64/include/QtCore/QMap
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o uploadmanager.o ../Vimeo/uploadmanager.cpp
+
+video.o: ../Vimeo/video.cpp ../Vimeo/video.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QString \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o video.o ../Vimeo/video.cpp
+
+videouploader.o: ../Vimeo/videouploader.cpp ../Vimeo/videouploader.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QNetworkAccessManager \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QObject \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnamespace.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobal.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qconfig.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qfeatures.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsystemdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qprocessordetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypeinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtypetraits.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsysinfo.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlogging.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qflags.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbasicatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qgenericatomic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv7.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv6.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_armv5.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_ia64.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_mips.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_x86.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_gcc.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qatomic_unix.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qglobalstatic.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmutex.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qnumeric.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstring.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qchar.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qrefcount.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qarraydata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringbuilder.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qalgorithms.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiterator.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qbytearraylist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcoreevent.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qscopedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmetatype.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qisenum.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qobject_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/QSslConfiguration \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslconfiguration.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qshareddata.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qhash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpair.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qregexp.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qiodevice.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdebug.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qmap.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qtextstream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qlocale.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvariant.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringlist.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatastream.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qstringmatcher.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qvector.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qpoint.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qset.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslerror.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qsslcertificate.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qcryptographichash.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qdatetime.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../../Qt/5.4/gcc_64/include/QtNetwork/qssl.h \
+		../../../Qt/5.4/gcc_64/include/QtCore/QFlags
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videouploader.o ../Vimeo/videouploader.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -1632,6 +2578,12 @@ moc_productkeyhandler.o: moc_productkeyhandler.cpp
 
 moc_newvideowizard.o: moc_newvideowizard.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_newvideowizard.o moc_newvideowizard.cpp
+
+moc_youtubeuploader.o: moc_youtubeuploader.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_youtubeuploader.o moc_youtubeuploader.cpp
+
+moc_webviewdialog.o: moc_webviewdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_webviewdialog.o moc_webviewdialog.cpp
 
 ####### Install
 

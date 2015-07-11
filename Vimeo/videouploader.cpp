@@ -2,6 +2,6 @@
 
 VideoUploader::VideoUploader()
 {
-
+    mgr = new QNetworkAccessManager();
 }
 

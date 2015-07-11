@@ -2,6 +2,7 @@
 #define WEBVIEWDIALOG_H
 
 #include <QDialog>
+#include <QWebView>
 
 namespace Ui {
 class WebViewDialog;
@@ -14,6 +15,7 @@ class WebViewDialog : public QDialog
 public:
     explicit WebViewDialog(QWidget *parent = 0);
     ~WebViewDialog();
+    QWebView* getWebView();
 
 private:
     Ui::WebViewDialog *ui;
