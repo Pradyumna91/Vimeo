@@ -22,5 +22,5 @@ void NewVideoWizard::uploadVideo()
     tags->append("one");
     tags->append("two");
     Video* v = new Video("TITLE", "DESC", "/home/pradyumna/Downloads/Captain Phillips 2013 HDRip x264 AC3-JYK/Captain Phillips 2013 HDRip x264 AC3-JYK.mkv", tags);
-    h->upload(v);
+    h->beginUploadProcess(v);
 }

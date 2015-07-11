@@ -11,7 +11,7 @@
 #include <QJsonObject>
 #include <QFile>
 
-class YoutubeUploader : public QObject, public VideoUploader
+class YoutubeUploader : public VideoUploader
 {
     Q_OBJECT
 private:
@@ -34,8 +34,9 @@ private:
 
 public:
     YoutubeUploader();
-    void upload(Video*);
+    void upload();
     ~YoutubeUploader();
+    void beginUploadProcess(Video* vid);
 
 public slots:
     void requestForAccessTokens(QString);

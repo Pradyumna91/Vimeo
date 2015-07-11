@@ -27,12 +27,17 @@ YoutubeUploader::~YoutubeUploader()
     delete view;
 }
 
-void YoutubeUploader::upload(Video* vid)
+void YoutubeUploader::beginUploadProcess(Video* vid)
 {
     if(vid == NULL)
         return;
 
     videoToUpload = vid;
+    upload();
+}
+
+void YoutubeUploader::upload()
+{
     connect(this, SIGNAL(tokensReceived()), this, SLOT(initialiseUploadSession()));
     if (accessToken.isEmpty())
     {
@@ -174,13 +179,10 @@ QJsonDocument* YoutubeUploader::createSnippetJson(Video* vid)
     snippetObj["description"] = vid->getDescription();
     snippetObj["categoryId"] = 22;
     QJsonArray allTags;
-    allTags.append(QJsonValue("one"));
-    allTags.append(QJsonValue("two"));
-//    QString tag;
-//    for (int i = 0; i < vid->getTags()->count(); i++)
-//    {
-//        allTags.append(QJsonValue(tag));
-//    }
+    for (int i = 0; i < vid->getTags()->count(); i++)
+    {
+        allTags.append(QJsonValue(vid->getTags()->at(i)));
+    }
     snippetObj["tags"] = allTags;
 
     QJsonDocument* doc = new QJsonDocument(snippetObj);
