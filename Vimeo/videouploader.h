@@ -3,7 +3,6 @@
 
 #include <QNetworkAccessManager>
 #include "video.h"
-#include "uploadmanager.h"
 
 class VideoUploader : public QObject
 {
@@ -18,7 +17,7 @@ public slots:
     virtual void beginUploadProcess(Video* videoToUpload) = 0;
 
 signals:
-    void uploadComplete(UploadManager::UPLOAD_SITES currentSite);
+    void uploadComplete(Video::UPLOAD_SITES currentSite);
 };
 
 #endif // VIDEOUPLOADER_H

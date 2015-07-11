@@ -8,20 +8,12 @@
 #include <QList>
 #include <QThread>
 
-class UploadManager
+class UploadManager : public QObject
 {
     Q_OBJECT
 public:
     static UploadManager *getInstance();
-    void uploadVideos(Video* videoToUpload, QList<UPLOAD_SITES> sitesToUploadTo);
-
-    enum UPLOAD_SITES
-    {
-        YOUTUBE,
-        VIMEO,
-        METACAFE,
-        DAILYMOTION
-    };
+    void uploadVideos(Video* videoToUpload, QList<Video::UPLOAD_SITES> sitesToUploadTo);
 
 signals:
     void startAllUploads();
@@ -29,13 +21,13 @@ signals:
 
 private:
     static UploadManager *instance;
-    QList<QThread> *uploadWorkerThreads;
-    QMap<UPLOAD_SITES, VideoUploader*> *uploaders;
+    QList<QThread*> *uploadWorkerThreads;
+    QMap<Video::UPLOAD_SITES, VideoUploader*> *uploaders;
 
     UploadManager();
 
 public slots:
-    void handleSingleCompletedDownload(UPLOAD_SITES uploadCompletedSite);
+    void handleSingleCompletedDownload(Video::UPLOAD_SITES uploadCompletedSite);
 };
 
 #endif // UPLOADMANAGER_H

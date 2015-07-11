@@ -11,6 +11,15 @@ private:
     QStringList *tags;
     QString filepath;
 public:
+
+    enum UPLOAD_SITES
+    {
+        YOUTUBE,
+        VIMEO,
+        METACAFE,
+        DAILYMOTION
+    };
+
     Video(QString title, QString desc, QString filepath, QStringList* tags);
     QString getTitle();
     QString getDescription();

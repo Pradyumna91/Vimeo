@@ -5,10 +5,10 @@ UploadManager* UploadManager::instance = NULL;
 
 UploadManager::UploadManager()
 {
-    uploaders = new QMap<UPLOAD_SITES, VideoUploader*>();
-    uploaders->insert(YOUTUBE, new YoutubeUploader());
+    uploaders = new QMap<Video::UPLOAD_SITES, VideoUploader*>();
+    uploaders->insert(Video::YOUTUBE, new YoutubeUploader());
 
-    uploadWorkerThreads = new QList<QThread>();
+    uploadWorkerThreads = new QList<QThread*>();
 }
 
 UploadManager* UploadManager::getInstance()
@@ -21,40 +21,38 @@ UploadManager* UploadManager::getInstance()
     return instance;
 }
 
-void UploadManager::uploadVideos(Video* videoToUpload, QList<UPLOAD_SITES> sitesToUploadTo)
+void UploadManager::uploadVideos(Video* videoToUpload, QList<Video::UPLOAD_SITES> sitesToUploadTo)
 {
-    UPLOAD_SITES site;
-    foreach(site, sitesToUploadTo)
+    for(int i = 0; i < sitesToUploadTo.length(); i++)
     {
-        switch(site)
+        QThread* worker = new QThread();
+        switch(sitesToUploadTo[i])
         {
-        case YOUTUBE:
-            QThread youtubeWorker;
-            uploadWorkerThreads->append(youtubeWorker);
-            uploaders->value(YOUTUBE)->moveToThread(youtubeWorker);
+        case Video::YOUTUBE:
+            uploadWorkerThreads->append(worker);
+            uploaders->value(Video::YOUTUBE)->moveToThread(worker);
             QObject::connect(this, SIGNAL(startAllUploads()),
-                             uploaders->value(YOUTUBE), SLOT(beginUploadProcess(Video*)));
-            QObject::connect(uploaders->value(YOUTUBE), SIGNAL(uploadComplete(UploadManager::UPLOAD_SITES)),
-                             this, SLOT(handleSingleCompletedDownload(UPLOAD_SITES)));
-            youtubeWorker.start();
+                             uploaders->value(Video::YOUTUBE), SLOT(beginUploadProcess(Video*)));
+            QObject::connect(uploaders->value(Video::YOUTUBE), SIGNAL(uploadComplete(Video::UPLOAD_SITES)),
+                             this, SLOT(handleSingleCompletedDownload(Video::UPLOAD_SITES)));
+            worker->start();
             break;
-        case METACAFE:
+        case Video::METACAFE:
             break;
-        case DAILYMOTION:
+        case Video::DAILYMOTION:
             break;
-        case VIMEO:
+        case Video::VIMEO:
             break;
         }
     }
 }
 
-void UploadManager::handleSingleCompletedDownload(UPLOAD_SITES uploadCompletedSite)
+void UploadManager::handleSingleCompletedDownload(Video::UPLOAD_SITES uploadCompletedSite)
 {
-    QThread item;
     bool allCompleted = true;
-    foreach(item, uploadWorkerThreads)
+    for(int i = 0; i < uploadWorkerThreads->length(); i++)
     {
-        if(item.isRunning())
+        if(uploadWorkerThreads->at(i)->isRunning())
         {
             allCompleted = false;
             break;
