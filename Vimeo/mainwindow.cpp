@@ -4,6 +4,7 @@
 #include "uploadedvideosstoragehandler.h"
 #include <QList>
 #include <QStandardItemModel>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,6 +22,16 @@ MainWindow::~MainWindow()
 
 void MainWindow::openNewUploadWizard()
 {
+    QString filepath;
+    QFileDialog filePicker(this);
+    filePicker.setFileMode(QFileDialog::ExistingFile);
+    filePicker.setAcceptMode(QFileDialog::AcceptOpen);
+    if(filePicker.exec())
+        filepath = filePicker.selectedFiles().first();
+
+    if(filepath.isEmpty())
+        return;
+
     wizrd = new NewVideoWizard();
     connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(uploadVideo()));
     wizrd->show();
