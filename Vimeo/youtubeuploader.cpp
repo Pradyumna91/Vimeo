@@ -111,6 +111,7 @@ void YoutubeUploader::cleanupAfterUpload(QNetworkReply *reply)
     if(reply != NULL && reply->error() == QNetworkReply::NoError)
     {
         delete videoToUpload;
+        emit uploadComplete(UploadManager::YOUTUBE);
     }
 }
 
