@@ -1,4 +1,5 @@
 #include "youtubeuploader.h"
+#include "simplecrypt.h"
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -8,18 +9,20 @@
 #include <QJsonArray>
 
 
+
 const QString YoutubeUploader::clientID = "428706088869-qct812sg761c6vkulvhdholas8c9iuoo.apps.googleusercontent.com";
 const QString YoutubeUploader::clientSecret = "_3wX4tCJvgydwI_i8ec3XEst";
 const QString YoutubeUploader::authRequestURLBase = "https://accounts.google.com/o/oauth2";
 const QString YoutubeUploader::redirectUri = "urn:ietf:wg:oauth:2.0:oob";
 const QString YoutubeUploader::scope = "https://www.googleapis.com/auth/youtube.upload";
 const QString YoutubeUploader::uploadUrl = "https://www.googleapis.com/upload/youtube/v3/videos";
+const QString YoutubeUploader::tokensFilePath = "youtube.dat";
+const qint64 YoutubeUploader::cipherSeed = 982308150983;
 
 YoutubeUploader::YoutubeUploader() : VideoUploader()
 {
     view = new WebViewDialog();
-    accessToken = "";
-    refreshToken = "";
+    readTokensFromFile();
 }
 
 YoutubeUploader::~YoutubeUploader()
@@ -78,7 +81,14 @@ void YoutubeUploader::initialiseUploadSession()
 
 void YoutubeUploader::handleCreateUploadSessionResponse(QNetworkReply *reply)
 {
-    if(reply != NULL && reply->error() == QNetworkReply::NoError)
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if(statusCode == 401)
+    {
+        refreshAccessTokens();
+        /*once the tokens are refreshed the tokensReceived signal will be fired which will
+         * automatically restart the download*/
+    }
+    else if(reply != NULL && reply->error() == QNetworkReply::NoError)
     {
         if(reply->hasRawHeader(QByteArray("Location")))
         {
@@ -86,6 +96,12 @@ void YoutubeUploader::handleCreateUploadSessionResponse(QNetworkReply *reply)
             startUpload(videoToUpload, uploadUri);
         }
     }
+    else
+    {
+        //Error handling
+    }
+    disconnect(mgr, SIGNAL(finished(QNetworkReply*)), this,
+               SLOT(handleCreateUploadSessionResponse(QNetworkReply*)));
 }
 
 void YoutubeUploader::startUpload(Video * vid, QString uplUri)
@@ -102,17 +118,29 @@ void YoutubeUploader::startUpload(Video * vid, QString uplUri)
         //=====================================================================
 
         connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(cleanupAfterUpload(QNetworkReply*)));
-        mgr->post(*req, v->readAll());
+        mgr->post(*req, v);
     }
 }
 
 void YoutubeUploader::cleanupAfterUpload(QNetworkReply *reply)
 {
-    if(reply != NULL && reply->error() == QNetworkReply::NoError)
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    if(statusCode == 401)
+    {
+        refreshAccessTokens();
+        /*once the tokens are refreshed the tokensReceived signal will be fired which will
+         * automatically restart the download*/
+    }
+    else if(reply != NULL && reply->error() == QNetworkReply::NoError && statusCode == 201)
     {
         delete videoToUpload;
         emit uploadComplete(Video::YOUTUBE);
     }
+    else
+    {
+        //Error handling
+    }
+    disconnect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(cleanupAfterUpload(QNetworkReply*)));
 }
 
 QUrl YoutubeUploader::getAuthRequestURL()
@@ -165,8 +193,15 @@ void YoutubeUploader::populateAccessTokens(QNetworkReply *reply)
         QJsonDocument response = QJsonDocument::fromJson(replyText.toUtf8());
         QJsonObject obj = response.object();
 
-        accessToken = obj["access_token"].isString() ? obj["access_token"].toString() : "";
-        refreshToken = obj["refresh_token"].isString() ? obj["refresh_token"].toString() : "";
+        if(obj["refresh_token"].isString())
+            refreshToken = obj["refresh_token"].toString();
+
+        if(obj["access_token"].isString())
+            accessToken = obj["access_token"].toString();
+        else
+        {
+            //Error handling
+        }
 
         disconnect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(populateAccessTokens(QNetworkReply*)));
         writeTokensToFile(accessToken, refreshToken);
@@ -192,5 +227,56 @@ QJsonDocument* YoutubeUploader::createSnippetJson(Video* vid)
 
 void YoutubeUploader::writeTokensToFile(QString actk, QString rftk)
 {
+    QFile tokensFile(tokensFilePath);
+    if(tokensFile.open(QIODevice::WriteOnly))
+    {
+        SimpleCrypt cipher(cipherSeed);
+        QByteArray encryptedString = cipher.encryptToByteArray(QString("%1:%2").arg(actk, rftk).toUtf8());
+        if(tokensFile.write(encryptedString) != encryptedString.length())
+        {
+            //QMessageBox::information(this, "Error", "Error writing to file", QMessageBox::Ok);
+            tokensFile.close();
+            return;
+        }
+        tokensFile.close();
+    }
     emit tokensReceived();
+}
+
+void YoutubeUploader::readTokensFromFile()
+{
+    QFile tokensFile(tokensFilePath);
+    if(tokensFile.exists())
+    {
+        if(tokensFile.open(QIODevice::ReadOnly))
+        {
+            SimpleCrypt cipher(cipherSeed);
+            QString decryptedString = cipher.decryptToString(tokensFile.readAll());
+            QStringList tokens = decryptedString.split(":");
+            accessToken = tokens.first();
+            refreshToken = tokens.last();
+        }
+    }
+    else
+    {
+        //initialising the tokens to empty string. They will get populated upon user authentication
+        accessToken = "";
+        refreshToken = "";
+    }
+}
+
+void YoutubeUploader::refreshAccessTokens()
+{
+    QUrl url(QString("%1/%2").arg(authRequestURLBase, "token"));
+
+    QUrlQuery params;
+    params.addQueryItem("client_id", clientID);
+    params.addQueryItem("client_secret", clientSecret);
+    params.addQueryItem("refresh_token", refreshToken);
+    params.addQueryItem("grant_type", "refresh_token");
+
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArray("application/x-www-form-urlencoded"));
+    connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(populateAccessTokens(QNetworkReply*)));
+    mgr->post(req, params.query(QUrl::FullyEncoded).toUtf8());
 }

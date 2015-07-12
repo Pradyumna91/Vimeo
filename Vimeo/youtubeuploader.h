@@ -21,6 +21,8 @@ private:
     static const QString redirectUri;
     static const QString scope;
     static const QString uploadUrl;
+    static const QString tokensFilePath;
+    static const qint64 cipherSeed;
 
     Video* videoToUpload;
     QString accessToken, refreshToken;
@@ -31,6 +33,8 @@ private:
     void writeTokensToFile(QString, QString);
     QJsonDocument *createSnippetJson(Video *);
     void startUpload(Video*, QString);
+    void readTokensFromFile();
+    void refreshAccessTokens();
 
 public:
     YoutubeUploader();
