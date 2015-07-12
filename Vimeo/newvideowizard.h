@@ -2,6 +2,11 @@
 #define NEWVIDEOWIZARD_H
 
 #include <QWizard>
+#include <QVideoWidget>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QHBoxLayout>
+#include <QPushButton>
 #include "videouploader.h"
 
 namespace Ui {
@@ -14,14 +19,20 @@ class NewVideoWizard : public QWizard
 
 public:
     explicit NewVideoWizard(QWidget *parent = 0);
+    NewVideoWizard(QString videoFilename, QWidget *parent = 0);
     ~NewVideoWizard();
 
 public slots:
     void uploadVideo();
+    void togglePlayPause(bool checked);
 
 private:
     Ui::NewVideoWizard *ui;
     VideoUploader *h;
+    QString videoFilename;
+    QVideoWidget *videoPlayer;
+    QMediaPlayer *previewPlayer;
+    QPushButton *playPauseToggleButton;
 };
 
 #endif // NEWVIDEOWIZARD_H

@@ -32,7 +32,7 @@ void MainWindow::openNewUploadWizard()
     if(filepath.isEmpty())
         return;
 
-    wizrd = new NewVideoWizard();
+    wizrd = new NewVideoWizard(filepath, this);
     connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(uploadVideo()));
     wizrd->show();
 }

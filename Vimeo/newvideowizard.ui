@@ -13,7 +13,13 @@
   <property name="windowTitle">
    <string>Wizard</string>
   </property>
-  <widget class="QWizardPage" name="addAnnotationsPage"/>
+  <widget class="QWizardPage" name="addAnnotationsPage">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QWizardPage" name="addKeywordsPage"/>
   <widget class="QWizardPage" name="uploadPage"/>
  </widget>
