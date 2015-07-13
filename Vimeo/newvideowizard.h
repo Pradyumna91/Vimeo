@@ -7,6 +7,9 @@
 #include <QMediaPlaylist>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QLineEdit>
+#include <QGridLayout>
+#include <QLabel>
 #include "videouploader.h"
 
 namespace Ui {
@@ -21,6 +24,9 @@ public:
     explicit NewVideoWizard(QWidget *parent = 0);
     NewVideoWizard(QString videoFilename, QWidget *parent = 0);
     ~NewVideoWizard();
+    void initializePage(int id);
+    void cleanupPage(int id);
+    bool validateCurrentPage();
 
 public slots:
     void uploadVideo();
@@ -33,6 +39,16 @@ private:
     QVideoWidget *videoPlayer;
     QMediaPlayer *previewPlayer;
     QPushButton *playPauseToggleButton;
+    QLineEdit *keywordsTextbox;
+    QLineEdit *descriptionTextbox;
+    QGridLayout *videoDetailsLayout;
+    QLabel *keywordsLabel;
+    QLabel *descriptionLabel;
+
+    void initializeFirstPage();
+    void cleanUpFirstPage();
+    void initializeSecondPage();
+    void cleanupSecondPage();
 };
 
 #endif // NEWVIDEOWIZARD_H
