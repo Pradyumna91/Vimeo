@@ -33,7 +33,7 @@ void MainWindow::openNewUploadWizard()
         return;
 
     wizrd = new NewVideoWizard(filepath, this);
-    connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(uploadVideo()));
+    connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(createCopies()));
     wizrd->show();
 }
 

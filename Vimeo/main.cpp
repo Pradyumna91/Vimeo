@@ -3,14 +3,12 @@
 #include "productkeyform.h"
 #include <QApplication>
 #include <QWebView>
+#include <QStringList>
+#include "duplicatevideo.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-//    QWebView view;
-//    view.load(QUrl("http://www.google.com"));
-//    view.show();
 
     MainWindow *mainWindow;
     ProductKeyForm *productKeyWindow;

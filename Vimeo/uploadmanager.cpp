@@ -5,10 +5,8 @@ UploadManager* UploadManager::instance = NULL;
 
 UploadManager::UploadManager()
 {
-    uploaders = new QMap<Video::UPLOAD_SITES, VideoUploader*>();
-    uploaders->insert(Video::YOUTUBE, new YoutubeUploader());
-
     uploadWorkerThreads = new QList<QThread*>();
+    uploaders = new QList<VideoUploader*>();
 }
 
 UploadManager* UploadManager::getInstance()
@@ -21,21 +19,35 @@ UploadManager* UploadManager::getInstance()
     return instance;
 }
 
-void UploadManager::uploadVideos(Video* videoToUpload, QList<Video::UPLOAD_SITES> sitesToUploadTo)
+void UploadManager::uploadVideos(QList<Video*> videosToUpload)
 {
-    for(int i = 0; i < sitesToUploadTo.length(); i++)
+    for(int i = 0; i < videosToUpload.length(); i++)
+    {
+        uploadSingleVideo(videosToUpload.at(i));
+    }
+}
+
+void UploadManager::uploadSingleVideo(Video* videoToUpload)
+{
+    int numberOfSites = videoToUpload->getUploadSites().length();
+    VideoUploader* uploaderObj;
+    for(int i = 0; i < numberOfSites; i++)
     {
         QThread* worker = new QThread();
-        switch(sitesToUploadTo[i])
+        switch(videoToUpload->getUploadSites().at(i))
         {
         case Video::YOUTUBE:
+            uploaderObj = new YoutubeUploader();
             uploadWorkerThreads->append(worker);
-            uploaders->value(Video::YOUTUBE)->moveToThread(worker);
-            QObject::connect(this, SIGNAL(startAllUploads()),
-                             uploaders->value(Video::YOUTUBE), SLOT(beginUploadProcess(Video*)));
-            QObject::connect(uploaders->value(Video::YOUTUBE), SIGNAL(uploadComplete(Video::UPLOAD_SITES)),
+            uploaders->append(uploaderObj);
+            uploaderObj->moveToThread(worker);
+
+//            QObject::connect(this, SIGNAL(startAllUploads()),
+//                             uploaderObj(), SLOT(beginUploadProcess(Video*)));
+            QObject::connect(uploaderObj, SIGNAL(uploadComplete(Video::UPLOAD_SITES)),
                              this, SLOT(handleSingleCompletedDownload(Video::UPLOAD_SITES)));
             worker->start();
+            uploaderObj->beginUploadProcess(videoToUpload);
             break;
         case Video::METACAFE:
             break;
@@ -61,4 +73,9 @@ void UploadManager::handleSingleCompletedDownload(Video::UPLOAD_SITES uploadComp
 
     if(allCompleted)
         emit completedAllUploads();
+}
+
+int UploadManager::getUploaderCount()
+{
+    return uploaders->count();
 }

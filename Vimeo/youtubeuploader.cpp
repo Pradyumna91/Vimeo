@@ -46,6 +46,10 @@ void YoutubeUploader::upload()
     {
         showWebPage();
     }
+    else
+    {
+        initialiseUploadSession();
+    }
 }
 
 void YoutubeUploader::initialiseUploadSession()
@@ -215,9 +219,9 @@ QJsonDocument* YoutubeUploader::createSnippetJson(Video* vid)
     snippetObj["description"] = vid->getDescription();
     snippetObj["categoryId"] = 22;
     QJsonArray allTags;
-    for (int i = 0; i < vid->getTags()->count(); i++)
+    for (int i = 0; i < vid->getTags().count(); i++)
     {
-        allTags.append(QJsonValue(vid->getTags()->at(i)));
+        allTags.append(QJsonValue(vid->getTags().at(i)));
     }
     snippetObj["tags"] = allTags;
 

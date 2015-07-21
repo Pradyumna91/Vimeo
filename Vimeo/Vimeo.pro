@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     uploadmanager.cpp \
     video.cpp \
     videouploader.cpp \
-    simplecrypt.cpp
+    simplecrypt.cpp \
+    duplicatevideo.cpp
 
 INCLUDEPATH +=  /usr/local/include/libopenshot/ \
                 /usr/local/include/libopenshot-audio/
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     uploadmanager.h \
     video.h \
     videouploader.h \
-    simplecrypt.h
+    simplecrypt.h \
+    duplicatevideo.h
 
 FORMS    += mainwindow.ui \
     productkeyform.ui \

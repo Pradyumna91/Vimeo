@@ -11,6 +11,8 @@
 #include <QGridLayout>
 #include <QLabel>
 #include "videouploader.h"
+#include "uploadmanager.h"
+#include "duplicatevideo.h"
 
 namespace Ui {
 class NewVideoWizard;
@@ -29,21 +31,27 @@ public:
     bool validateCurrentPage();
 
 public slots:
-    void uploadVideo();
+    void createCopies();
+    void uploadVideos();
     void togglePlayPause(bool checked);
 
 private:
     Ui::NewVideoWizard *ui;
-    VideoUploader *h;
+    DuplicateVideo* videoDuplicator;
     QString videoFilename;
     QVideoWidget *videoPlayer;
     QMediaPlayer *previewPlayer;
     QPushButton *playPauseToggleButton;
     QLineEdit *keywordsTextbox;
     QLineEdit *descriptionTextbox;
+    QLineEdit *titleTextbox;
     QGridLayout *videoDetailsLayout;
     QLabel *keywordsLabel;
     QLabel *descriptionLabel;
+    QLabel *titleLabel;
+    QLabel *filenameLabels;
+
+    QStringList *newFilenames;
 
     void initializeFirstPage();
     void cleanUpFirstPage();

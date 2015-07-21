@@ -20,7 +20,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="uploadPage"/>
+  <widget class="QWizardPage" name="uploadPage">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout"/>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>

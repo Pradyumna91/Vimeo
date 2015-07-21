@@ -13,7 +13,8 @@ class UploadManager : public QObject
     Q_OBJECT
 public:
     static UploadManager *getInstance();
-    void uploadVideos(Video* videoToUpload, QList<Video::UPLOAD_SITES> sitesToUploadTo);
+    void uploadVideos(QList<Video*> videosToUpload);
+    int getUploaderCount();
 
 signals:
     void startAllUploads();
@@ -22,9 +23,10 @@ signals:
 private:
     static UploadManager *instance;
     QList<QThread*> *uploadWorkerThreads;
-    QMap<Video::UPLOAD_SITES, VideoUploader*> *uploaders;
+    QList<VideoUploader*> *uploaders;
 
     UploadManager();
+    void uploadSingleVideo(Video* videoToUpload);
 
 public slots:
     void handleSingleCompletedDownload(Video::UPLOAD_SITES uploadCompletedSite);

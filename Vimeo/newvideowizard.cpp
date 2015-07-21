@@ -5,6 +5,7 @@
 
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QFileInfo>
 
 NewVideoWizard::NewVideoWizard(QWidget *parent) :
     QWizard(parent),
@@ -17,6 +18,7 @@ NewVideoWizard::NewVideoWizard(QString videoFilename, QWidget *parent) :
     QWizard(parent), ui(new Ui::NewVideoWizard)
 {
     this->videoFilename = videoFilename;
+    newFilenames = new QStringList();
     ui->setupUi(this);
 }
 
@@ -25,14 +27,25 @@ NewVideoWizard::~NewVideoWizard()
     delete ui;
 }
 
-void NewVideoWizard::uploadVideo()
+void NewVideoWizard::uploadVideos()
 {
-    h = new YoutubeUploader();
-    QStringList* tags = new QStringList();
-    tags->append("one");
-    tags->append("two");
-    Video* v = new Video("Banu's headphones", "look at the lighting!!", "/home/pradyumna/Downloads/testvid.webm", tags);
-    h->beginUploadProcess(v);
+    QStringList tags = keywordsTextbox->text().split(";");
+    QList<Video*> videoList;
+    QList<Video::UPLOAD_SITES> site;
+    site.append(Video::YOUTUBE);
+    for(int i = 0; i < newFilenames->length(); i++)
+    {
+        videoList.append(new Video(titleTextbox->text(), descriptionTextbox->text(), newFilenames->at(i), tags, site));
+    }
+
+    UploadManager::getInstance()->uploadVideos(videoList);
+}
+
+void NewVideoWizard::createCopies()
+{
+    videoDuplicator = new DuplicateVideo(videoFilename, newFilenames);
+    videoDuplicator->createCopies();
+    connect(videoDuplicator, SIGNAL(completedAllJobs()), this, SLOT(uploadVideos()));
 }
 
 void NewVideoWizard::togglePlayPause(bool checked)
@@ -93,13 +106,16 @@ void NewVideoWizard::initializeFirstPage()
     keywordsLabel = new QLabel("Keywords:", ui->addAnnotationsPage);
     descriptionTextbox = new QLineEdit(ui->addAnnotationsPage);
     descriptionLabel = new QLabel("Description:", ui->addAnnotationsPage);
+    titleTextbox = new QLineEdit(ui->addAnnotationsPage);
+    titleLabel = new QLabel("Title", ui->addAnnotationsPage);
 
-    videoDetailsLayout->addWidget(keywordsLabel,0,0,1,1);
-    videoDetailsLayout->addWidget(keywordsTextbox,0,1,1,1);
-    videoDetailsLayout->addWidget(descriptionLabel,1,0,1,1);
-    videoDetailsLayout->addWidget(descriptionTextbox,1,1,1,1);
+    videoDetailsLayout->addWidget(titleLabel,0,0,1,1);
+    videoDetailsLayout->addWidget(titleTextbox,0,1,1,1);
+    videoDetailsLayout->addWidget(keywordsLabel,1,0,1,1);
+    videoDetailsLayout->addWidget(keywordsTextbox,1,1,1,1);
+    videoDetailsLayout->addWidget(descriptionLabel,2,0,1,1);
+    videoDetailsLayout->addWidget(descriptionTextbox,2,1,1,1);
 
-    //ui->verticalLayout->addStretch();
     ui->verticalLayout->addLayout(videoDetailsLayout);
 
     connect(playPauseToggleButton, SIGNAL(toggled(bool)), this, SLOT(togglePlayPause(bool)));
@@ -119,7 +135,17 @@ void NewVideoWizard::cleanUpFirstPage()
 
 void NewVideoWizard::initializeSecondPage()
 {
+    QStringList keywordsList = keywordsTextbox->text().split(";");
+    QString fileExtension = QFileInfo(videoFilename).suffix();
 
+    filenameLabels = new QLabel[keywordsList.count()];
+    for(int i = 0; i < keywordsList.count(); i++)
+    {
+       QString fname = keywordsList.at(i) + "." + fileExtension;
+       newFilenames->append(fname);
+       filenameLabels[i].setText(fname);
+       ui->gridLayout->addWidget(&filenameLabels[i],i,0,1,1);
+    }
 }
 
 void NewVideoWizard::cleanupSecondPage()
@@ -136,7 +162,7 @@ bool NewVideoWizard::validateCurrentPage()
             QMessageBox::information(this, "Incomplete input", "The keyword and desription fields cannot be empty", QMessageBox::Ok);
             return false;
         }
-        else
-            return true;
     }
+
+    return true;
 }
