@@ -1,12 +1,15 @@
 #include "video.h"
+#include <QFileInfo>
 
-Video::Video(QString title, QString desc, QString filepath, QStringList tags, QList<UPLOAD_SITES> sites)
+Video::Video(QString title, QString desc, QString filepath, QStringList tags, QDate uploadDate, QList<UPLOAD_SITES> sites)
 {
     this->title = title;
     this->description = desc;
     this->tags = tags;
     this->filepath = filepath;
     this->sites = sites;
+    this->uploadDate = uploadDate;
+    this->url = QString("");
 }
 
 QString Video::getDescription()
@@ -54,4 +57,24 @@ Video::UPLOAD_SITES Video::getUploadSiteFromString(QString uploadSiteName)
         site = Video::VIMEO;
 
     return site;
+}
+
+QString Video::getUrl()
+{
+    return url;
+}
+
+QDate Video::getUploadDate()
+{
+    return uploadDate;
+}
+
+qint64 Video::getFileSize()
+{
+    return QFileInfo(filepath).size();
+}
+
+void Video::setUrl(QString url)
+{
+    this->url = url;
 }

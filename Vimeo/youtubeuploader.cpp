@@ -8,8 +8,6 @@
 #include <QUrl>
 #include <QJsonArray>
 
-
-
 const QString YoutubeUploader::clientID = "428706088869-qct812sg761c6vkulvhdholas8c9iuoo.apps.googleusercontent.com";
 const QString YoutubeUploader::clientSecret = "_3wX4tCJvgydwI_i8ec3XEst";
 const QString YoutubeUploader::authRequestURLBase = "https://accounts.google.com/o/oauth2";
@@ -18,16 +16,20 @@ const QString YoutubeUploader::scope = "https://www.googleapis.com/auth/youtube.
 const QString YoutubeUploader::uploadUrl = "https://www.googleapis.com/upload/youtube/v3/videos";
 const QString YoutubeUploader::tokensFilePath = "youtube.dat";
 const qint64 YoutubeUploader::cipherSeed = 982308150983;
+const int YoutubeUploader::timeIntervalForStatusQuery = 5000;
 
 YoutubeUploader::YoutubeUploader() : VideoUploader()
 {
     view = new WebViewDialog();
+    queryUploadStatusTimer = new QTimer(this);
     readTokensFromFile();
 }
 
 YoutubeUploader::~YoutubeUploader()
 {
     delete view;
+    delete queryUploadStatusTimer;
+
 }
 
 void YoutubeUploader::beginUploadProcess(Video* vid)
@@ -65,7 +67,7 @@ void YoutubeUploader::initialiseUploadSession()
         //Creating the resumable download request object============================
         QUrlQuery params;
         params.addQueryItem("uploadType", "resumable");
-        params.addQueryItem("part", "snippet");
+        params.addQueryItem("part", "snippet,status");
         QUrl uplUrl(uploadUrl);
         uplUrl.setQuery(params.query(QUrl::FullyEncoded).toUtf8());
         QNetworkRequest* req = new QNetworkRequest(uplUrl);
@@ -97,6 +99,7 @@ void YoutubeUploader::handleCreateUploadSessionResponse(QNetworkReply *reply)
         if(reply->hasRawHeader(QByteArray("Location")))
         {
             QString uploadUri = reply->rawHeader(QByteArray("Location"));
+            videoUploadAddress = uploadUri;
             startUpload(videoToUpload, uploadUri);
         }
     }
@@ -123,6 +126,8 @@ void YoutubeUploader::startUpload(Video * vid, QString uplUri)
 
         connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(cleanupAfterUpload(QNetworkReply*)));
         mgr->post(*req, v);
+        connect(queryUploadStatusTimer, SIGNAL(timeout()), this, SLOT(trackUploadStatus()));
+        queryUploadStatusTimer->start(timeIntervalForStatusQuery);
     }
 }
 
@@ -135,10 +140,12 @@ void YoutubeUploader::cleanupAfterUpload(QNetworkReply *reply)
         /*once the tokens are refreshed the tokensReceived signal will be fired which will
          * automatically restart the download*/
     }
-    else if(reply != NULL && reply->error() == QNetworkReply::NoError && statusCode == 201)
+    else if(reply != NULL && reply->error() == QNetworkReply::NoError && statusCode == 200)
     {
         delete videoToUpload;
-        emit uploadComplete(Video::YOUTUBE);
+        queryUploadStatusTimer->stop();
+        emit uploadStatus(100);
+        emit uploadComplete(videoToUpload->getFilepath(), Video::YOUTUBE);
     }
     else
     {
@@ -225,7 +232,16 @@ QJsonDocument* YoutubeUploader::createSnippetJson(Video* vid)
     }
     snippetObj["tags"] = allTags;
 
-    QJsonDocument* doc = new QJsonDocument(snippetObj);
+    QJsonObject statusObj;
+    statusObj["privacyStatus"] = "public";
+    statusObj["embeddable"] = true;
+    statusObj["license"] = "youtube";
+
+    QJsonObject partsObj;
+    partsObj["snippet"] = snippetObj;
+    partsObj["status"] = statusObj;
+
+    QJsonDocument* doc = new QJsonDocument(partsObj);
     return doc;
 }
 
@@ -283,4 +299,35 @@ void YoutubeUploader::refreshAccessTokens()
     req.setHeader(QNetworkRequest::ContentTypeHeader, QByteArray("application/x-www-form-urlencoded"));
     connect(mgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(populateAccessTokens(QNetworkReply*)));
     mgr->post(req, params.query(QUrl::FullyEncoded).toUtf8());
+}
+
+void YoutubeUploader::trackUploadStatus()
+{
+    QNetworkAccessManager *man = new QNetworkAccessManager();
+    QUrl url(videoUploadAddress);
+    QNetworkRequest statusCheckRequest(url);
+    qint64 fileSize = videoToUpload->getFileSize();
+    QString contentRangeHeaderValue = QString("bytes */%1").arg(fileSize);
+
+    statusCheckRequest.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(0));
+    statusCheckRequest.setRawHeader(QByteArray("Content-Range"), contentRangeHeaderValue.toUtf8());
+    statusCheckRequest.setRawHeader(QByteArray("Authorization"), QString("Bearer %1").arg(accessToken).toUtf8());
+
+    connect(man, SIGNAL(finished(QNetworkReply*)), this, SLOT(emitUploadProgress(QNetworkReply*)));
+
+    man->put(statusCheckRequest, QByteArray());
+}
+
+void YoutubeUploader::emitUploadProgress(QNetworkReply* reply)
+{
+    if(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 308 && reply->hasRawHeader("Range"))
+    {
+        int fileSize = videoToUpload->getFileSize();
+        QString uploadedBytesAsString = QString(reply->rawHeader("Range")).split("=").at(1).split("-").at(1);
+        float uploadedBytes = uploadedBytesAsString.toFloat()/fileSize;
+        int percentBytesUploaded = uploadedBytes * 100;
+        emit uploadStatus(percentBytesUploaded);
+        if(fileSize == uploadedBytes)
+            queryUploadStatusTimer->stop();
+    }
 }

@@ -29,6 +29,7 @@ private:
 public:
     DuplicateVideo(QString orgnlFilename, QStringList* cpyFilenamesList);
     void createCopies();
+    static QString getCopyFilesDumpPath();
 
 signals:
     void completedAllJobs();

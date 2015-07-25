@@ -10,7 +10,7 @@ DuplicateVideo::DuplicateVideo(QString orgnlFilename, QStringList *cpyFilenamesL
     this->copyFilenamesList = new QStringList();
     for(int i = 0; i < cpyFilenamesList->count(); i++)
     {
-        this->copyFilenamesList->append(copyFilesDumpPath + cpyFilenamesList->at(i));
+        this->copyFilenamesList->append(cpyFilenamesList->at(i));
     }
 
     future = new QFuture<void>[cpyFilenamesList->count()];
@@ -48,4 +48,9 @@ void DuplicateVideo::completedSingleJob()
     {
         emit completedAllJobs();
     }
+}
+
+QString DuplicateVideo::getCopyFilesDumpPath()
+{
+    return copyFilesDumpPath;
 }

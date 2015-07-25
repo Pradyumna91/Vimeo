@@ -15,6 +15,7 @@ public:
     static UploadManager *getInstance();
     void uploadVideos(QList<Video*> videosToUpload);
     int getUploaderCount();
+    QList<VideoUploader *> *getUploaders();
 
 signals:
     void startAllUploads();
@@ -29,7 +30,7 @@ private:
     void uploadSingleVideo(Video* videoToUpload);
 
 public slots:
-    void handleSingleCompletedDownload(Video::UPLOAD_SITES uploadCompletedSite);
+    void handleSingleCompletedDownload(QString filepath, Video::UPLOAD_SITES uploadCompletedSite);
 };
 
 #endif // UPLOADMANAGER_H

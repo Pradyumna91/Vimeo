@@ -35,6 +35,9 @@ public slots:
     void uploadVideos();
     void togglePlayPause(bool checked);
 
+signals:
+    void uploadStarted(QList<Video*> videosBeingUploaded);
+
 private:
     Ui::NewVideoWizard *ui;
     DuplicateVideo* videoDuplicator;

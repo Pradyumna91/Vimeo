@@ -2,10 +2,13 @@
 #include "ui_newvideowizard.h"
 #include "youtubeuploader.h"
 #include "video.h"
+#include "mainwindow.h"
 
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QStringList>
+#include <QList>
 
 NewVideoWizard::NewVideoWizard(QWidget *parent) :
     QWizard(parent),
@@ -35,17 +38,19 @@ void NewVideoWizard::uploadVideos()
     site.append(Video::YOUTUBE);
     for(int i = 0; i < newFilenames->length(); i++)
     {
-        videoList.append(new Video(titleTextbox->text(), descriptionTextbox->text(), newFilenames->at(i), tags, site));
+        videoList.append(new Video(titleTextbox->text(), descriptionTextbox->text(), newFilenames->at(i), tags, QDate::currentDate(), site));
     }
 
     UploadManager::getInstance()->uploadVideos(videoList);
+    emit uploadStarted(videoList);
 }
 
 void NewVideoWizard::createCopies()
 {
     videoDuplicator = new DuplicateVideo(videoFilename, newFilenames);
-    videoDuplicator->createCopies();
     connect(videoDuplicator, SIGNAL(completedAllJobs()), this, SLOT(uploadVideos()));
+    connect(videoDuplicator, SIGNAL(completedAllJobs()), (MainWindow*)this->parent(), SLOT(hideStatus()));
+    videoDuplicator->createCopies();
 }
 
 void NewVideoWizard::togglePlayPause(bool checked)
@@ -141,7 +146,7 @@ void NewVideoWizard::initializeSecondPage()
     filenameLabels = new QLabel[keywordsList.count()];
     for(int i = 0; i < keywordsList.count(); i++)
     {
-       QString fname = keywordsList.at(i) + "." + fileExtension;
+       QString fname = DuplicateVideo::getCopyFilesDumpPath() + keywordsList.at(i) + "." + fileExtension;
        newFilenames->append(fname);
        filenameLabels[i].setText(fname);
        ui->gridLayout->addWidget(&filenameLabels[i],i,0,1,1);

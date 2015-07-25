@@ -10,6 +10,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QFile>
+#include <QTimer>
+#include <QtConcurrent/QtConcurrent>
 
 class YoutubeUploader : public VideoUploader
 {
@@ -23,9 +25,12 @@ private:
     static const QString uploadUrl;
     static const QString tokensFilePath;
     static const qint64 cipherSeed;
+    static const int timeIntervalForStatusQuery;
+
+    QTimer *queryUploadStatusTimer;
 
     Video* videoToUpload;
-    QString accessToken, refreshToken;
+    QString accessToken, refreshToken, videoUploadAddress;
     WebViewDialog* view;
 
     QUrl getAuthRequestURL();
@@ -43,11 +48,15 @@ public:
     void beginUploadProcess(Video* vid);
 
 public slots:
+    void trackUploadStatus();
+
+private slots:
     void requestForAccessTokens(QString);
     void populateAccessTokens(QNetworkReply *);
     void handleCreateUploadSessionResponse(QNetworkReply*);
     void cleanupAfterUpload(QNetworkReply*);
     void initialiseUploadSession();
+    void emitUploadProgress(QNetworkReply*reply);
 
 signals:
     void tokensReceived();

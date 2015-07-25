@@ -17,7 +17,8 @@ public slots:
     virtual void beginUploadProcess(Video* videoToUpload) = 0;
 
 signals:
-    void uploadComplete(Video::UPLOAD_SITES currentSite);
+    void uploadComplete(QString filepath, Video::UPLOAD_SITES currentSite);
+    void uploadStatus(int percentOfBytesWritten);
 };
 
 #endif // VIDEOUPLOADER_H

@@ -23,7 +23,7 @@ void UploadManager::uploadVideos(QList<Video*> videosToUpload)
 {
     for(int i = 0; i < videosToUpload.length(); i++)
     {
-        uploadSingleVideo(videosToUpload.at(i));
+        uploadSingleVideo(videosToUpload.at(0));
     }
 }
 
@@ -42,10 +42,8 @@ void UploadManager::uploadSingleVideo(Video* videoToUpload)
             uploaders->append(uploaderObj);
             uploaderObj->moveToThread(worker);
 
-//            QObject::connect(this, SIGNAL(startAllUploads()),
-//                             uploaderObj(), SLOT(beginUploadProcess(Video*)));
-            QObject::connect(uploaderObj, SIGNAL(uploadComplete(Video::UPLOAD_SITES)),
-                             this, SLOT(handleSingleCompletedDownload(Video::UPLOAD_SITES)));
+            QObject::connect(uploaderObj, SIGNAL(uploadComplete(QString,Video::UPLOAD_SITES)),
+                             this, SLOT(handleSingleCompletedDownload(QString,Video::UPLOAD_SITES)));
             worker->start();
             uploaderObj->beginUploadProcess(videoToUpload);
             break;
@@ -59,7 +57,7 @@ void UploadManager::uploadSingleVideo(Video* videoToUpload)
     }
 }
 
-void UploadManager::handleSingleCompletedDownload(Video::UPLOAD_SITES uploadCompletedSite)
+void UploadManager::handleSingleCompletedDownload(QString filepath, Video::UPLOAD_SITES uploadCompletedSite)
 {
     bool allCompleted = true;
     for(int i = 0; i < uploadWorkerThreads->length(); i++)
@@ -78,4 +76,9 @@ void UploadManager::handleSingleCompletedDownload(Video::UPLOAD_SITES uploadComp
 int UploadManager::getUploaderCount()
 {
     return uploaders->count();
+}
+
+QList<VideoUploader*>* UploadManager::getUploaders()
+{
+    return uploaders;
 }
