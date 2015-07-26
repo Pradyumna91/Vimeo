@@ -24,7 +24,7 @@ public slots:
     void showStatus();
     void hideStatus();
     void trackUploadStatus(QList<Video*> videosBeingUploaded);
-    void completedCurrentUploads();
+    void completedCurrentUploads(QList<Video *>);
 
 private:
     Ui::MainWindow *ui;

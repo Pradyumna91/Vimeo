@@ -10,6 +10,7 @@ class VideoUploader : public QObject
 protected:
     QNetworkAccessManager *mgr;
     virtual void upload() = 0;
+    static const int timeIntervalForStatusQuery;
 public:
     VideoUploader();
 
@@ -17,7 +18,7 @@ public slots:
     virtual void beginUploadProcess(Video* videoToUpload) = 0;
 
 signals:
-    void uploadComplete(QString filepath, Video::UPLOAD_SITES currentSite);
+    void uploadComplete();
     void uploadStatus(int percentOfBytesWritten);
 };
 

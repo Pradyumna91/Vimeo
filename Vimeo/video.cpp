@@ -12,6 +12,11 @@ Video::Video(QString title, QString desc, QString filepath, QStringList tags, QD
     this->url = QString("");
 }
 
+QString Video::ToString()
+{
+    return QString("%1||%2||%3\n").arg(filepath).arg(url).arg(uploadDate.toString());
+}
+
 QString Video::getDescription()
 {
     return description;
@@ -37,11 +42,26 @@ QList<Video::UPLOAD_SITES> Video::getUploadSites()
     return sites;
 }
 
-QStringList Video::getUploadSitesAsStrings()
+QString Video::getUploadSitesAsString(UPLOAD_SITES site)
 {
-    QStringList list;
-    list << "Youtube" << "Vimeo" << "Metacafe" << "DailyMotion";
-    return list;
+    QString siteNameAsString;
+
+    switch (site) {
+    case Video::YOUTUBE:
+        siteNameAsString = "Youtube";
+        break;
+    case Video::DAILYMOTION:
+        siteNameAsString = "Dailymotion";
+        break;
+    case Video::METACAFE:
+        siteNameAsString = "Metacafe";
+        break;
+    case Video::VIMEO:
+        siteNameAsString = "Vimeo";
+        break;
+    }
+
+    return siteNameAsString;
 }
 
 Video::UPLOAD_SITES Video::getUploadSiteFromString(QString uploadSiteName)

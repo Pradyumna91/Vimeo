@@ -25,7 +25,6 @@ private:
     static const QString uploadUrl;
     static const QString tokensFilePath;
     static const qint64 cipherSeed;
-    static const int timeIntervalForStatusQuery;
 
     QTimer *queryUploadStatusTimer;
 

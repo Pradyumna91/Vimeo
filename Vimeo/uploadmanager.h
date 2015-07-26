@@ -19,10 +19,12 @@ public:
 
 signals:
     void startAllUploads();
-    void completedAllUploads();
+    void completedAllUploads(QList<Video*>);
 
 private:
+    QList<Video*> currentlyUploadingVideos;
     static UploadManager *instance;
+    static int completedUploadsCount;
     QList<QThread*> *uploadWorkerThreads;
     QList<VideoUploader*> *uploaders;
 
@@ -30,7 +32,7 @@ private:
     void uploadSingleVideo(Video* videoToUpload);
 
 public slots:
-    void handleSingleCompletedDownload(QString filepath, Video::UPLOAD_SITES uploadCompletedSite);
+    void handleSingleCompletedDownload();
 };
 
 #endif // UPLOADMANAGER_H

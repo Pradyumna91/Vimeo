@@ -2,6 +2,7 @@
 #include "youtubeuploader.h"
 
 UploadManager* UploadManager::instance = NULL;
+int UploadManager::completedUploadsCount = 0;
 
 UploadManager::UploadManager()
 {
@@ -21,6 +22,7 @@ UploadManager* UploadManager::getInstance()
 
 void UploadManager::uploadVideos(QList<Video*> videosToUpload)
 {
+    currentlyUploadingVideos = videosToUpload;
     for(int i = 0; i < videosToUpload.length(); i++)
     {
         uploadSingleVideo(videosToUpload.at(0));
@@ -42,8 +44,8 @@ void UploadManager::uploadSingleVideo(Video* videoToUpload)
             uploaders->append(uploaderObj);
             uploaderObj->moveToThread(worker);
 
-            QObject::connect(uploaderObj, SIGNAL(uploadComplete(QString,Video::UPLOAD_SITES)),
-                             this, SLOT(handleSingleCompletedDownload(QString,Video::UPLOAD_SITES)));
+            QObject::connect(uploaderObj, SIGNAL(uploadComplete()),
+                             this, SLOT(handleSingleCompletedDownload()));
             worker->start();
             uploaderObj->beginUploadProcess(videoToUpload);
             break;
@@ -57,20 +59,34 @@ void UploadManager::uploadSingleVideo(Video* videoToUpload)
     }
 }
 
-void UploadManager::handleSingleCompletedDownload(QString filepath, Video::UPLOAD_SITES uploadCompletedSite)
+void UploadManager::handleSingleCompletedDownload()
 {
-    bool allCompleted = true;
-    for(int i = 0; i < uploadWorkerThreads->length(); i++)
-    {
-        if(uploadWorkerThreads->at(i)->isRunning())
-        {
-            allCompleted = false;
-            break;
-        }
-    }
+    bool allCompleted;
+    completedUploadsCount++;
+
+    if(completedUploadsCount == uploadWorkerThreads->count())
+        allCompleted = true;
+    else
+        allCompleted = false;
 
     if(allCompleted)
-        emit completedAllUploads();
+    {
+        //Stopping all upload threads once the uploads are complete
+        for(int i = 0; i < uploadWorkerThreads->length(); i++)
+        {
+            uploadWorkerThreads->at(i)->quit();
+        }
+        for(int i = 0; i < uploaders->length(); i++)
+        {
+            delete uploaders->at(i);
+        }
+
+        //Resetting count to zero for next batch
+        uploaders->clear();
+        completedUploadsCount = 0;
+
+        emit completedAllUploads(currentlyUploadingVideos);
+    }
 }
 
 int UploadManager::getUploaderCount()

@@ -18,8 +18,10 @@ public:
         DAILYMOTION
     };
 
-    static QStringList getUploadSitesAsStrings();
+    static QString getUploadSitesAsString(UPLOAD_SITES site);
     static UPLOAD_SITES getUploadSiteFromString(QString uploadSiteName);
+
+    QString ToString();
 
     Video(QString title, QString desc, QString filepath, QStringList tags, QDate uploadDate, QList<UPLOAD_SITES> sites);
     QString getTitle();

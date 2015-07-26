@@ -16,7 +16,6 @@ const QString YoutubeUploader::scope = "https://www.googleapis.com/auth/youtube.
 const QString YoutubeUploader::uploadUrl = "https://www.googleapis.com/upload/youtube/v3/videos";
 const QString YoutubeUploader::tokensFilePath = "youtube.dat";
 const qint64 YoutubeUploader::cipherSeed = 982308150983;
-const int YoutubeUploader::timeIntervalForStatusQuery = 5000;
 
 YoutubeUploader::YoutubeUploader() : VideoUploader()
 {
@@ -142,10 +141,9 @@ void YoutubeUploader::cleanupAfterUpload(QNetworkReply *reply)
     }
     else if(reply != NULL && reply->error() == QNetworkReply::NoError && statusCode == 200)
     {
-        delete videoToUpload;
         queryUploadStatusTimer->stop();
         emit uploadStatus(100);
-        emit uploadComplete(videoToUpload->getFilepath(), Video::YOUTUBE);
+        emit uploadComplete();
     }
     else
     {

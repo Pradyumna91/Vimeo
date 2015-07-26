@@ -5,10 +5,10 @@
 
 QString UploadedVideosStorageHandler::filename = "UploadedVideosList.dat";
 
-QList<UploadedVideo> UploadedVideosStorageHandler::getPreviouslyUploadedVideos()
+QList<Video> UploadedVideosStorageHandler::getPreviouslyUploadedVideos()
 {
     QFile storageFile(filename);
-    QList<UploadedVideo> uploadedVideos;
+    QList<Video> uploadedVideos;
 
     if(storageFile.exists())
     {
@@ -17,8 +17,12 @@ QList<UploadedVideo> UploadedVideosStorageHandler::getPreviouslyUploadedVideos()
             QTextStream reader(&storageFile);
             while(!reader.atEnd())
             {
-                QStringList uploadedVidinfo = reader.readLine().split(",", QString::SkipEmptyParts);
-                UploadedVideo videoInfo(uploadedVidinfo[0], QUrl(uploadedVidinfo[1]), uploadedVidinfo[2]);
+                QStringList uploadedVidinfo = reader.readLine().split("||");
+
+                Video videoInfo("", "", uploadedVidinfo[0], QStringList(),
+                        QDate::fromString(uploadedVidinfo[2]), QList<Video::UPLOAD_SITES>());
+                videoInfo.setUrl(uploadedVidinfo[1]);
+
                 uploadedVideos.append(videoInfo);
             }
         }
@@ -32,7 +36,7 @@ QList<UploadedVideo> UploadedVideosStorageHandler::getPreviouslyUploadedVideos()
     return uploadedVideos;
 }
 
-void UploadedVideosStorageHandler::addUploadedVideos(QList<UploadedVideo> videos)
+void UploadedVideosStorageHandler::addUploadedVideos(QList<Video*> videos)
 {
     QFile storageFile(filename);
 
@@ -48,12 +52,11 @@ void UploadedVideosStorageHandler::addUploadedVideos(QList<UploadedVideo> videos
     }
 
     if(!isOpen)
-        //throw exception here
+        ;//throw exception here
 
-    foreach (UploadedVideo video, videos)
+    foreach (Video* video, videos)
     {
-        QString line = video.filename + "," + video.url.toString() + "," + video.uploadDate.toString(Qt::TextDate);
-        storageFile.write(line.toLatin1());
+        storageFile.write(video->ToString().toLatin1());
     }
 
     storageFile.close();

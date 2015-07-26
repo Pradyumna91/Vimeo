@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     //individualUploadStatusBars = new QList<QProgressBar*>();
     ui->uploadedVideosTable->setColumnCount(4);
+    QStringList headers = QStringList() << QString("Filename") << QString("URL") << QString("Upload Status") << QString("Date Uploaded");
+    ui->uploadedVideosTable->setHorizontalHeaderLabels(headers);
     statusProgressBar = new QProgressBar(this);
     statusBarTextLabel = new QLabel(this);
     statusProgressBar->hide();
@@ -44,8 +46,8 @@ void MainWindow::openNewUploadWizard()
     connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(createCopies()));
     connect(wizrd, SIGNAL(finished(int)), this, SLOT(showStatus()));
     connect(wizrd, SIGNAL(uploadStarted(QList<Video*>)), this, SLOT(trackUploadStatus(QList<Video*>)));
-    connect(UploadManager::getInstance(), SIGNAL(completedAllUploads()), this,
-            SLOT(completedCurrentUploads()));
+    connect(UploadManager::getInstance(), SIGNAL(completedAllUploads(QList<Video*>)), this,
+            SLOT(completedCurrentUploads(QList<Video*>)));
     wizrd->show();
 }
 
@@ -67,23 +69,21 @@ void MainWindow::hideStatus()
 
 void MainWindow::populateUploadedVideosTable()
 {
-    QList<UploadedVideo> uploadedVideos = UploadedVideosStorageHandler::getPreviouslyUploadedVideos();
+    QList<Video> uploadedVideos = UploadedVideosStorageHandler::getPreviouslyUploadedVideos();
 
     if(uploadedVideos.count() == 0)
         return;                     // No videos have been uploaded yet
 
-    QStringList headers = QStringList() << QString("Filename") << QString("URL") << QString("Upload Status") << QString("Date Uploaded");
-
     ui->uploadedVideosTable->setRowCount(uploadedVideos.count());
-    ui->uploadedVideosTable->setHorizontalHeaderLabels(headers);
 
     int row = 0;
-    foreach (UploadedVideo video, uploadedVideos)
+    foreach (Video video, uploadedVideos)
     {
-        ui->uploadedVideosTable->setItem(row, 0, (new QTableWidgetItem(video.filename)));
-        ui->uploadedVideosTable->setItem(row, 1, (new QTableWidgetItem(video.url.toString())));
+        QString filename = QFileInfo(video.getFilepath()).fileName();
+        ui->uploadedVideosTable->setItem(row, 0, (new QTableWidgetItem(filename)));
+        ui->uploadedVideosTable->setItem(row, 1, (new QTableWidgetItem(video.getUrl())));
         ui->uploadedVideosTable->setItem(row, 2, (new QTableWidgetItem("Completed")));
-        ui->uploadedVideosTable->setItem(row, 2, (new QTableWidgetItem(video.uploadDate.toString())));
+        ui->uploadedVideosTable->setItem(row, 3, (new QTableWidgetItem(video.getUploadDate().toString())));
         row++;
     }
 }
@@ -112,10 +112,12 @@ void MainWindow::trackUploadStatus(QList<Video *> videosBeingUploaded)
     }
 }
 
-void MainWindow::completedCurrentUploads()
+void MainWindow::completedCurrentUploads(QList<Video*> videoList)
 {
-//    foreach(QProgressBar* bar, individualUploadStatusBars)
-//    {
-//        ui->uploadedVideosTable->row()
-//    }
+    UploadedVideosStorageHandler::addUploadedVideos(videoList);
+
+    foreach(Video* vid, videoList)
+    {
+        delete vid;
+    }
 }
