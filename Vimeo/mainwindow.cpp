@@ -32,14 +32,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::openNewUploadWizard()
 {
-    QString filepath;
-    QFileDialog filePicker(this);
-    filePicker.setFileMode(QFileDialog::ExistingFile);
-    filePicker.setAcceptMode(QFileDialog::AcceptOpen);
-    if(filePicker.exec())
-        filepath = filePicker.selectedFiles().first();
+    QString filepath = QFileDialog::getOpenFileName(this,
+                                                    tr("Open File"),
+                                                    "/home",
+                                                    tr("Videos (*.mov *.mpeg4 *.mp4 *.avi *.wmv *.mpegps *.flv *.webm)"));
 
-    if(filepath.isEmpty())
+    if(filepath.isNull())
         return;
 
     wizrd = new NewVideoWizard(filepath, this);
