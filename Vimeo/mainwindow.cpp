@@ -4,7 +4,6 @@
 #include "uploadedvideosstoragehandler.h"
 #include <QList>
 #include <QStandardItemModel>
-#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,17 +31,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::openNewUploadWizard()
 {
-    QString filepath = QFileDialog::getOpenFileName(this,
-                                                    tr("Open File"),
-                                                    "/home",
-                                                    tr("Videos (*.mov *.mpeg4 *.mp4 *.avi *.wmv *.mpegps *.flv *.webm)"));
-
-    if(filepath.isNull())
-        return;
-
-    wizrd = new NewVideoWizard(filepath, this);
-    connect(wizrd, SIGNAL(finished(int)), wizrd, SLOT(createCopies()));
-    connect(wizrd, SIGNAL(finished(int)), this, SLOT(showStatus()));
+    wizrd = new NewVideoWizard(this);
+    connect(wizrd->button(QWizard::FinishButton), SIGNAL(clicked(bool)), wizrd, SLOT(createCopies()));
+    connect(wizrd->button(QWizard::FinishButton), SIGNAL(clicked(bool)), this, SLOT(showStatus()));
     connect(wizrd, SIGNAL(uploadStarted(QList<Video*>)), this, SLOT(trackUploadStatus(QList<Video*>)));
     connect(UploadManager::getInstance(), SIGNAL(completedAllUploads(QList<Video*>)), this,
             SLOT(completedCurrentUploads(QList<Video*>)));

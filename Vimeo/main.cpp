@@ -5,6 +5,8 @@
 #include <QWebView>
 #include <QStringList>
 #include "duplicatevideo.h"
+#include "transformer.h"
+#include <QSettings>
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +14,12 @@ int main(int argc, char *argv[])
 
     MainWindow *mainWindow;
     ProductKeyForm *productKeyWindow;
+
+    QCoreApplication::setOrganizationName("Org");
+    QCoreApplication::setApplicationName("Venom");
+
+    QSettings settings;
+    settings.setValue("VideoFilesDumpPath", "./Dump/");
 
     if(!ProductKeyHandler::isLincensedProduct())
     {

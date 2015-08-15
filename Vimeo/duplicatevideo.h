@@ -24,8 +24,6 @@ private:
 
     void createCopy(QString copyFilename);
 
-    static const QString copyFilesDumpPath;
-
 public:
     DuplicateVideo(QString orgnlFilename, QStringList* cpyFilenamesList);
     void createCopies();

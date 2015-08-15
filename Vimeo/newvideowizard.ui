@@ -13,7 +13,20 @@
   <property name="windowTitle">
    <string>Wizard</string>
   </property>
+  <widget class="QWizardPage" name="editVideoPage">
+   <property name="title">
+    <string>Select the video and image to overlay on the video</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="editVideoLayout"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QWizardPage" name="addAnnotationsPage">
+   <property name="title">
+    <string>Add video details</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -21,6 +34,12 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="uploadPage">
+   <property name="title">
+    <string>Upload</string>
+   </property>
+   <property name="subTitle">
+    <string/>
+   </property>
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout"/>

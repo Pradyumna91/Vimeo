@@ -11,7 +11,7 @@ CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Vimeo
+TARGET = Venom
 TEMPLATE = app
 
 
@@ -27,10 +27,12 @@ SOURCES += main.cpp\
     video.cpp \
     videouploader.cpp \
     simplecrypt.cpp \
-    duplicatevideo.cpp
+    duplicatevideo.cpp \
+    transformer.cpp
 
-INCLUDEPATH +=  /usr/local/include/libopenshot/ \
-                /usr/local/include/libopenshot-audio/
+INCLUDEPATH +=  /usr/local/include/libopenshot/include \
+                /usr/local/include/libopenshot-audio/ \
+                /usr/include/ImageMagick/
 
 HEADERS  += mainwindow.h \
     productkeyform.h \
@@ -43,7 +45,8 @@ HEADERS  += mainwindow.h \
     video.h \
     videouploader.h \
     simplecrypt.h \
-    duplicatevideo.h
+    duplicatevideo.h \
+    transformer.h
 
 FORMS    += mainwindow.ui \
     productkeyform.ui \
@@ -51,3 +54,17 @@ FORMS    += mainwindow.ui \
     webviewdialog.ui
 
 RESOURCES +=
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/release/ -lopenshot
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/debug/ -lopenshot
+else:unix: LIBS += -L$$PWD/../../../../../usr/local/lib/ -lopenshot
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../../usr/local/include
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/release/ -lopenshot-audio
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/debug/ -lopenshot-audio
+else:unix: LIBS += -L$$PWD/../../../../../usr/local/lib/ -lopenshot-audio
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../../usr/local/include

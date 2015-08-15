@@ -1,8 +1,7 @@
 #include "duplicatevideo.h"
 #include <QFile>
 #include <QException>
-
-const QString DuplicateVideo::copyFilesDumpPath = "./Dump/";
+#include <QSettings>
 
 DuplicateVideo::DuplicateVideo(QString orgnlFilename, QStringList *cpyFilenamesList)
 {
@@ -21,7 +20,8 @@ DuplicateVideo::DuplicateVideo(QString orgnlFilename, QStringList *cpyFilenamesL
 
 void DuplicateVideo::createCopies()
 {
-    QDir().mkdir(copyFilesDumpPath);
+    QSettings settings;
+    QDir().mkdir(settings.value("VideoFilesDumpPath").toString());
     numberOfRunningJobs = copyFilenamesList->count();
     for(int i = 0; i < numberOfRunningJobs; i++)
     {
@@ -52,5 +52,6 @@ void DuplicateVideo::completedSingleJob()
 
 QString DuplicateVideo::getCopyFilesDumpPath()
 {
-    return copyFilesDumpPath;
+    QSettings settings;
+    return settings.value("VideoFilesDumpPath").toString();
 }
